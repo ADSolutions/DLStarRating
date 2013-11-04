@@ -17,8 +17,8 @@
 
 @protocol DLStarRatingDelegate;
 
-@interface DLStarRatingControl : UIControl {
-	int numberOfStars;
+@interface DLStarRatingControl : UIControl
+{
 	int currentIdx;
 	UIImage *star;
 	UIImage *highlightedStar;
@@ -34,6 +34,7 @@
 @property (nonatomic) float rating;
 @property (assign,nonatomic) IBOutlet id<DLStarRatingDelegate> delegate;
 @property (nonatomic,assign) BOOL isFractionalRatingEnabled;
+@property (nonatomic) NSInteger numberOfStars;
 
 @end
 

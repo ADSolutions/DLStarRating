@@ -22,12 +22,20 @@
 #pragma mark -
 #pragma mark Initialization
 
+#pragma mark - Setters
+
+-(void)setNumberOfStars:(NSInteger)numberOfStars
+{
+    _numberOfStars = numberOfStars;
+    [self setupView];
+}
+
 - (void)setupView {
 	self.clipsToBounds = YES;
 	currentIdx = -1;
 	star = [UIImage imageNamed:@"star.png"];
 	highlightedStar = [UIImage imageNamed:@"star_highlighted.png"];        
-	for (int i=0; i<numberOfStars; i++) {
+	for (int i=0; i<_numberOfStars; i++) {
 		DLStarView *v = [[DLStarView alloc] initWithDefault:self.star highlighted:self.highlightedStar position:i allowFractions:isFractionalRatingEnabled];
 		[self addSubview:v];
 	}
@@ -36,9 +44,9 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-		numberOfStars = kDefaultNumberOfStars;
+		_numberOfStars = kDefaultNumberOfStars;
         if (isFractionalRatingEnabled)
-            numberOfStars *=kNumberOfFractions;
+            _numberOfStars *=kNumberOfFractions;
 		[self setupView];
     }
     return self;
@@ -47,30 +55,30 @@
 - (id)initWithFrame:(CGRect)frame {
 	self = [super initWithFrame:frame];
 	if (self) {
-		numberOfStars = kDefaultNumberOfStars;
+		_numberOfStars = kDefaultNumberOfStars;
         if (isFractionalRatingEnabled)
-            numberOfStars *=kNumberOfFractions;
+            _numberOfStars *=kNumberOfFractions;
         [self setupView];
 
 	}
 	return self;
 }
 
-- (id)initWithFrame:(CGRect)frame andStars:(NSUInteger)_numberOfStars isFractional:(BOOL)isFract{
+- (id)initWithFrame:(CGRect)frame andStars:(NSUInteger)__numberOfStars isFractional:(BOOL)isFract{
 	self = [super initWithFrame:frame];
 	if (self) {
         isFractionalRatingEnabled = isFract;
-		numberOfStars = _numberOfStars;
+		__numberOfStars = _numberOfStars;
         if (isFractionalRatingEnabled)
-            numberOfStars *=kNumberOfFractions;
+            _numberOfStars *=kNumberOfFractions;
 		[self setupView];
 	}
 	return self;
 }
 
 - (void)layoutSubviews {
-	for (int i=0; i < numberOfStars; i++) {
-		[(DLStarView*)[self subViewWithTag:i] centerIn:self.frame with:numberOfStars];
+	for (int i=0; i < _numberOfStars; i++) {
+		[(DLStarView*)[self subViewWithTag:i] centerIn:self.frame with:_numberOfStars];
 	}
 }
 
@@ -94,7 +102,7 @@
 #pragma mark Touch Handling
 
 - (UIButton*)starForPoint:(CGPoint)point {
-	for (int i=0; i < numberOfStars; i++) {
+	for (int i=0; i < _numberOfStars; i++) {
 		if (CGRectContainsPoint([self subViewWithTag:i].frame, point)) {
 			return (UIButton*)[self subViewWithTag:i];
 		}
@@ -103,14 +111,14 @@
 }
 
 - (void)disableStarsDownToExclusive:(int)idx {
-	for (int i=numberOfStars; i > idx; --i) {
+	for (int i=_numberOfStars; i > idx; --i) {
 		UIButton *b = (UIButton*)[self subViewWithTag:i];
 		b.highlighted = NO;
 	}
 }
 
 - (void)disableStarsDownTo:(int)idx {
-	for (int i=numberOfStars; i >= idx; --i) {
+	for (int i=_numberOfStars; i >= idx; --i) {
 		UIButton *b = (UIButton*)[self subViewWithTag:i];
 		b.highlighted = NO;
 	}
