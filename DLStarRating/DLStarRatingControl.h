@@ -20,9 +20,6 @@
 @interface DLStarRatingControl : UIControl
 {
 	int currentIdx;
-	UIImage *star;
-	UIImage *highlightedStar;
-    BOOL isFractionalRatingEnabled;
 }
 
 - (id)initWithFrame:(CGRect)frame;

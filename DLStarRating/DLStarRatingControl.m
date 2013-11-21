@@ -1,5 +1,4 @@
 /*
-
     DLStarRating
     Copyright (C) 2011 David Linsin <dlinsin@gmail.com> 
 
@@ -14,13 +13,86 @@
 #import "DLStarView.h"
 #import "UIView+Subviews.h"
 
-
 @implementation DLStarRatingControl
 
-@synthesize star, highlightedStar, delegate, isFractionalRatingEnabled;
+#pragma mark - Initialization
 
-#pragma mark -
-#pragma mark Initialization
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self)
+    {
+		_numberOfStars = kDefaultNumberOfStars;
+        if (_isFractionalRatingEnabled)
+            _numberOfStars *=kNumberOfFractions;
+		[self setupView];
+    }
+    return self;
+}
+
+- (id)initWithFrame:(CGRect)frame
+{
+	self = [super initWithFrame:frame];
+	if (self)
+    {
+		_numberOfStars = kDefaultNumberOfStars;
+        if (_isFractionalRatingEnabled)
+            _numberOfStars *=kNumberOfFractions;
+        [self setupView];
+	}
+    
+	return self;
+}
+
+- (id)initWithFrame:(CGRect)frame andStars:(NSUInteger)__numberOfStars isFractional:(BOOL)isFract
+{
+	self = [super initWithFrame:frame];
+	if (self)
+    {
+        _isFractionalRatingEnabled = isFract;
+		__numberOfStars = _numberOfStars;
+        if (_isFractionalRatingEnabled)
+            _numberOfStars *=kNumberOfFractions;
+		[self setupView];
+	}
+	return self;
+}
+
+- (void)setupView
+{
+	self.clipsToBounds = YES;
+	currentIdx = -1;
+	_star = [UIImage imageNamed:@"star.png"];
+	_highlightedStar = [UIImage imageNamed:@"star_highlighted.png"];
+	
+    for (int i = 0; i<_numberOfStars; i++)
+    {
+        CGRect destinationFrame = CGRectMake((self.frame.size.width/_numberOfStars)*i, 0, (self.frame.size.width/_numberOfStars), self.frame.size.height);
+		DLStarView *starView = [[DLStarView alloc] initWithDefault:[self resizedImage:self.star withFrame:destinationFrame] highlighted:[self resizedImage:self.highlightedStar withFrame:destinationFrame] position:i allowFractions:_isFractionalRatingEnabled andFrame:destinationFrame];
+		[self addSubview:starView];
+	}
+}
+
+- (void)layoutSubviews
+{
+	for (int i=0; i < _numberOfStars; i++)
+    {
+		[(DLStarView *)[self subViewWithTag:i] centerIn:self.frame with:_numberOfStars];
+	}
+}
+
+-(UIImage *)resizedImage:(UIImage *)image withFrame:(CGRect)destinationFrame
+{
+    CGFloat aspect = CGRectGetHeight(destinationFrame) <= CGRectGetWidth(destinationFrame) ? CGRectGetHeight(destinationFrame) : CGRectGetWidth(destinationFrame);
+    
+    UIImage *newImage = nil;
+    UIGraphicsBeginImageContextWithOptions(destinationFrame.size, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, aspect, aspect)];
+    newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return newImage;
+}
 
 #pragma mark - Setters
 
@@ -30,70 +102,19 @@
     [self setupView];
 }
 
-- (void)setupView {
-	self.clipsToBounds = YES;
-	currentIdx = -1;
-	star = [UIImage imageNamed:@"star.png"];
-	highlightedStar = [UIImage imageNamed:@"star_highlighted.png"];        
-	for (int i=0; i<_numberOfStars; i++) {
-		DLStarView *v = [[DLStarView alloc] initWithDefault:self.star highlighted:self.highlightedStar position:i allowFractions:isFractionalRatingEnabled];
-		[self addSubview:v];
-	}
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-		_numberOfStars = kDefaultNumberOfStars;
-        if (isFractionalRatingEnabled)
-            _numberOfStars *=kNumberOfFractions;
-		[self setupView];
-    }
-    return self;
-}
-
-- (id)initWithFrame:(CGRect)frame {
-	self = [super initWithFrame:frame];
-	if (self) {
-		_numberOfStars = kDefaultNumberOfStars;
-        if (isFractionalRatingEnabled)
-            _numberOfStars *=kNumberOfFractions;
-        [self setupView];
-
-	}
-	return self;
-}
-
-- (id)initWithFrame:(CGRect)frame andStars:(NSUInteger)__numberOfStars isFractional:(BOOL)isFract{
-	self = [super initWithFrame:frame];
-	if (self) {
-        isFractionalRatingEnabled = isFract;
-		__numberOfStars = _numberOfStars;
-        if (isFractionalRatingEnabled)
-            _numberOfStars *=kNumberOfFractions;
-		[self setupView];
-	}
-	return self;
-}
-
-- (void)layoutSubviews {
-	for (int i=0; i < _numberOfStars; i++) {
-		[(DLStarView*)[self subViewWithTag:i] centerIn:self.frame with:_numberOfStars];
-	}
-}
-
 #pragma mark -
 #pragma mark Customization
 
-- (void)setStar:(UIImage*)defaultStarImage highlightedStar:(UIImage*)highlightedStarImage atIndex:(int)index {
+- (void)setStar:(UIImage*)defaultStarImage highlightedStar:(UIImage*)highlightedStarImage atIndex:(int)index
+{
     DLStarView *selectedStar = (DLStarView*)[self subViewWithTag:index];
     
     // check if star exists
     if (!selectedStar) return;
     
     // check images for nil else use default stars
-    defaultStarImage = (defaultStarImage) ? defaultStarImage : star;
-    highlightedStarImage = (highlightedStarImage) ? highlightedStarImage : highlightedStar;
+    defaultStarImage = (defaultStarImage) ? defaultStarImage : _star;
+    highlightedStarImage = (highlightedStarImage) ? highlightedStarImage : _highlightedStar;
     
     [selectedStar setStarImage:defaultStarImage highlightedStarImage:highlightedStarImage];
 }
@@ -123,7 +144,6 @@
 		b.highlighted = NO;
 	}
 }
-
 
 - (void)enableStarsUpTo:(int)idx {
 	for (int i=0; i <= idx; i++) {
@@ -186,7 +206,7 @@
 #pragma mark Rating Property
 
 - (void)setRating:(float)_rating {
-    if (isFractionalRatingEnabled) {
+    if (_isFractionalRatingEnabled) {
         _rating *=kNumberOfFractions;
     }
 	[self disableStarsDownTo:0];
@@ -195,7 +215,7 @@
 }
 
 - (float)rating {
-    if (isFractionalRatingEnabled) {
+    if (_isFractionalRatingEnabled) {
         return (float)(currentIdx+1)/kNumberOfFractions;
     }
 	return (NSUInteger)currentIdx+1;

@@ -12,11 +12,12 @@
 
 #import "UIView+Subviews.h"
 
-
 @implementation UIView (Subviews)
 
-- (UIView*)subViewWithTag:(int)tag {
-	for (UIView *v in self.subviews) {
+- (UIView*)subViewWithTag:(int)tag
+{
+	for (UIView *v in self.subviews)
+    {
 		if (v.tag == tag) {
 			return v;
 		}
