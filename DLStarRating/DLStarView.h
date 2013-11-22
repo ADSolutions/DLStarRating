@@ -16,9 +16,9 @@
 
 @interface DLStarView : UIButton
 
-- (id)initWithDefault:(UIImage*)star highlighted:(UIImage*)highlightedStar position:(int)index allowFractions:(BOOL)fractions andFrame:(CGRect)frame;
-- (void)centerIn:(CGRect)_frame with:(int)numberOfStars;
-- (void)setStarImage:(UIImage*)starImage highlightedStarImage:(UIImage*)highlightedImage;
-- (UIImage *)croppedImage:(UIImage*)image;
+- (id)initWithDefault:(UIImage *)star highlighted:(UIImage *)highlightedStar position:(NSInteger)index allowFractions:(BOOL)fractions andFrame:(CGRect)frame;
+- (void)centerIn:(CGRect)_frame with:(NSInteger)numberOfStars;
+- (void)setStarImage:(UIImage *)starImage highlightedStarImage:(UIImage *)highlightedImage;
+- (UIImage *)croppedImage:(UIImage *)image;
 
 @end

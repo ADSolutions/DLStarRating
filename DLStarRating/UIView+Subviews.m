@@ -14,7 +14,7 @@
 
 @implementation UIView (Subviews)
 
-- (UIView*)subViewWithTag:(int)tag
+- (UIView*)subViewWithTag:(NSInteger)tag
 {
 	for (UIView *v in self.subviews)
     {

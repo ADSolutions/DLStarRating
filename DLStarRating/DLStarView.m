@@ -18,7 +18,7 @@
 #pragma mark -
 #pragma mark Initialization
 
-- (id)initWithDefault:(UIImage *)star highlighted:(UIImage *)highlightedStar position:(int)index allowFractions:(BOOL)fractions andFrame:(CGRect)frame
+- (id)initWithDefault:(UIImage *)star highlighted:(UIImage *)highlightedStar position:(NSInteger)index allowFractions:(BOOL)fractions andFrame:(CGRect)frame
 {
 	self = [super initWithFrame:frame];
     
@@ -42,7 +42,7 @@
         }
         else
         {
-   	        [self setAccessibilityLabel:[NSString stringWithFormat:@"%d stars", index+1]];   
+   	        [self setAccessibilityLabel:[NSString stringWithFormat:@"%ld stars", index+1]];
         }
 	}
     
@@ -54,7 +54,7 @@
 - (UIImage *)croppedImage:(UIImage *)image
 {
     float partWidth = image.size.width/kNumberOfFractions * image.scale;
-    int part = (self.tag+kNumberOfFractions)%kNumberOfFractions;
+    NSInteger part = (self.tag+kNumberOfFractions)%kNumberOfFractions;
     float xOffset = partWidth*part;
     CGRect newFrame = CGRectMake(xOffset, 0, partWidth , image.size.height * image.scale);
     CGImageRef resultImage = CGImageCreateWithImageInRect([image CGImage], newFrame);
@@ -72,7 +72,7 @@
 
 #pragma mark - Layouting
 
-- (void)centerIn:(CGRect)_frame with:(int)numberOfStars
+- (void)centerIn:(CGRect)_frame with:(NSInteger)numberOfStars
 {
 	CGSize size = self.frame.size;
 	

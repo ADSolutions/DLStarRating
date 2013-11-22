@@ -19,18 +19,18 @@
 
 @interface DLStarRatingControl : UIControl
 {
-	int currentIdx;
+	NSInteger currentIdx;
 }
 
 - (id)initWithFrame:(CGRect)frame;
 - (id)initWithFrame:(CGRect)frame andStars:(NSUInteger)_numberOfStars isFractional:(BOOL)isFract;
-- (void)setStar:(UIImage*)defaultStarImage highlightedStar:(UIImage*)highlightedStarImage atIndex:(int)index;
+- (void)setStar:(UIImage *)defaultStarImage highlightedStar:(UIImage *)highlightedStarImage atIndex:(NSInteger)index;
 
-@property (strong,nonatomic) UIImage *star;
-@property (strong,nonatomic) UIImage *highlightedStar;
+@property (strong, nonatomic) UIImage *star;
+@property (strong, nonatomic) UIImage *highlightedStar;
 @property (nonatomic) float rating;
-@property (assign,nonatomic) IBOutlet id<DLStarRatingDelegate> delegate;
-@property (nonatomic,assign) BOOL isFractionalRatingEnabled;
+@property (assign, nonatomic) IBOutlet id<DLStarRatingDelegate> delegate;
+@property (nonatomic, assign) BOOL isFractionalRatingEnabled;
 @property (nonatomic) NSInteger numberOfStars;
 
 @end

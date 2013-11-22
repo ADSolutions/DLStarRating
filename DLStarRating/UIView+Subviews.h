@@ -12,9 +12,8 @@
 
 #import <UIKit/UIKit.h>
 
-
 @interface UIView (Subviews)
 
-- (UIView*)subViewWithTag:(int)tag;
+- (UIView *)subViewWithTag:(NSInteger)tag;
 
 @end
