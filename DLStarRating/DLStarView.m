@@ -42,7 +42,7 @@
         }
         else
         {
-   	        [self setAccessibilityLabel:[NSString stringWithFormat:@"%ld stars", index+1]];
+   	        [self setAccessibilityLabel:[NSString stringWithFormat:@"%d stars", index+1]];
         }
 	}
     
